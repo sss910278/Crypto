@@ -33,7 +33,7 @@ def Coin_Monitor():
     Data = response.read()
     Rate = string.rfind(Data,'rate')
     Price =  string.atof(Data[Rate+7:Rate+17])
-    print 'Last ' + Coin +' rate : ' + str(Price) + ' BTC ' ' _____ ' + time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+    print 'Last ' + Coin + ' rate : ' + str(Price) + ' BTC ' + ' _____ ' + time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
     if(Price >= UP):
         Alert('U')
         UP = UP + (UP-LOW)/2
