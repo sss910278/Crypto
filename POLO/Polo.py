@@ -9,7 +9,7 @@ def Alert(Check):
     if (Check == 'U'):
         info = Coin + ' Price Over ' + str(UP) + ' BTC'
     elif (Check == 'L'):
-        info = 'Price below' + str(LOW)
+        info = Coin + ' Price below ' + str(LOW) + ' BTC'
 
     gmail_user = 'ss910278@gmail.com'
     gmail_pwd = 'thedaniel'
@@ -28,25 +28,27 @@ def Alert(Check):
 
 def Coin_Monitor():
     global UP,LOW
-    threading.Timer(5.0, Coin_Monitor).start()
     response = urlopen('https://poloniex.com/public?command=returnTradeHistory&currencyPair=BTC_'+Coin)
     Data = response.read()
-    Rate = string.rfind(Data,'rate')
-    Price =  string.atof(Data[Rate+7:Rate+17])
+    Rate = string.find(Data,'rate')
+    Price =  string.atof(Data[Rate+7:Rate+16])
     print 'Last ' + Coin + ' rate : ' + str(Price) + ' BTC ' + ' _____ ' + time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
-    if(Price >= UP):
+    if(Price>UP):
         Alert('U')
-        UP = UP + (UP-LOW)/2
-        LOW = LOW + (UP-LOW)/2
-    elif(Price <= LOW):
+        UP = UP + D
+        LOW = LOW + D
+    elif(Price<LOW):
         Alert('L')
-        UP = UP - (UP-LOW)/2
-        LOW = LOW - (UP-LOW)/2
+        UP = UP - D
+        LOW = LOW - D
+    threading.Timer(15.0, Coin_Monitor).start()
 
 print('Enter the upper price threshold for alert ')
 UP = float(raw_input())
 print('Enter the lower price threshold for alert ')
 LOW = float(raw_input())
+print('Enter the Tolerance')
+D = float(raw_input())
 print('Enter the coin you wish to monitor ')
 Coin = raw_input()
 
